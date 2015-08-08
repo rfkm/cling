@@ -8,7 +8,7 @@
 (import-vars
  [cling.entrypoint
   create-handler
-  defmain]
+  defentrypoint]
  [cling.command
   defcmd
   defcontainer]

@@ -19,15 +19,32 @@
   (apply concat' args))
 
 (defmethod merge-context-item :argument-specs [& args]
-  (apply dont-inherit args))
+  (apply override-if-exists args))
 
 (defmethod merge-context-item :desc [& args]
-  (apply dont-inherit args))
+  (apply override-if-exists args))
 
 (defmethod merge-context-item :long-desc [& args]
-  (apply dont-inherit args))
+  (apply override-if-exists args))
 
 (defmethod merge-context-item :default [parent child k]
+  (dissoc parent k))
+
+(defmulti inherit-context-item (fn [parent child k] k))
+
+(defmethod inherit-context-item :option-specs [& args]
+  (apply concat' args))
+
+(defmethod inherit-context-item :argument-specs [& args]
+  (apply dont-inherit args))
+
+(defmethod inherit-context-item :desc [& args]
+  (apply dont-inherit args))
+
+(defmethod inherit-context-item :long-desc [& args]
+  (apply dont-inherit args))
+
+(defmethod inherit-context-item :default [parent child k]
   (dissoc parent k))
 
 (defn get-context [spec]
@@ -42,5 +59,11 @@
 (defn merge-context [a b]
   (reduce (fn [acc k]
             (merge-context-item acc b k))
+          a
+          (into (set (keys a)) (keys b))))
+
+(defn inherit-context [a b]
+  (reduce (fn [acc k]
+            (inherit-context-item acc b k))
           a
           (into (set (keys a)) (keys b))))

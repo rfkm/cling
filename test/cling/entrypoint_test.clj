@@ -38,22 +38,24 @@ bbbbbbbbbbbbbbbbbbbbbbbb."
 
 (cmd/defcontainer root
   "Awesome CLI Application!"
-  [["-h" "--help" "Display this help message"]]
+  []
   {:db db
    :server server})
 
-
-(def handler (c/create-handler root {:project-name "Cling"
-                                     :version "1.3.0"
-                                     :date "2015-10-29 14:20:30"
-                                     :hash "1a2b3c4d5e"}))
+(c/defentrypoint ep
+  root
+  {:project-name  "Cling"
+   :version       "1.3.0"
+   :date          "2015-10-29 14:20:30"
+   :hash          "1a2b3c4d5e"
+   :exit-process? false})
 
 (defn remove-last-line [s]
   (str/join "\n" (drop-last 2 (str/split s #"\n" -1))))
 
 (binding [*enable-ansi?* false]
   (facts
-    (remove-last-line (with-out-str (handler [])))
+    (remove-last-line (with-out-str (ep)))
     =>
     "Cling version 1.3.0 (1a2b3c4d5e) 2015-10-29 14:20:30
 
@@ -64,13 +66,13 @@ Description:
   Awesome CLI Application!
 
 Options:
-  --help (-h)  Display this help message
+  --help (-h)  Display help information
 
 Commands:
   db      DB utilities
   server  Run server."
 
-    (remove-last-line (with-out-str (handler ["db"])))
+    (remove-last-line (with-out-str (ep "db")))
     =>
     "Cling version 1.3.0 (1a2b3c4d5e) 2015-10-29 14:20:30
 
@@ -81,16 +83,16 @@ Description:
   DB utilities
 
 Options:
-  --help (-h)           Display this help message
+  --help (-h)           Display help information
   --config (-c) CONFIG  DB Config file
 
 Commands:
   migrate   Migrate DB.
   rollback  Rollback DB."
 
-    (handler ["db" "migrate"]) => :migrate
+    (ep "db" "migrate") => :migrate
 
-    (remove-last-line (with-out-str (handler ["db" "migrate" "-h"])))
+    (remove-last-line (with-out-str (ep "db" "migrate" "-h")))
     =>
     "Cling version 1.3.0 (1a2b3c4d5e) 2015-10-29 14:20:30
 
@@ -103,6 +105,6 @@ Description:
   bbbbbbbbbbbbbbbbbbbbbbbb.
 
 Options:
-  --help (-h)           Display this help message
+  --help (-h)           Display help information
   --config (-c) CONFIG  DB Config file
   --schema (-s) SCHEMA  Schema."))

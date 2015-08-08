@@ -75,7 +75,7 @@
     (ctx/get-context {:a {:a :a}}) => ..ctx2..
     (ctx/get-context {:a :a}) => ..ctx3..
     (ctx/get-context :a) => ..ctx4..
-    (ctx/merge-context {} ..ctx1..) => ..ctx1'..
-    (ctx/merge-context ..ctx1'.. ..ctx2..) => ..ctx2'..
-    (ctx/merge-context ..ctx2'.. ..ctx3..) => ..ctx3'..
-    (ctx/merge-context ..ctx3'.. ..ctx4..) => ..compiled..))
+    (ctx/inherit-context {} ..ctx1..) => ..ctx1'..
+    (ctx/inherit-context ..ctx1'.. ..ctx2..) => ..ctx2'..
+    (ctx/inherit-context ..ctx2'.. ..ctx3..) => ..ctx3'..
+    (ctx/inherit-context ..ctx3'.. ..ctx4..) => ..compiled..))

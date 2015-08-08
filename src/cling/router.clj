@@ -20,7 +20,7 @@
     (result matched-args nil)
 
     :else
-    (let [context' (ctx/merge-context context (ctx/get-context spec))
+    (let [context' (ctx/inherit-context context (ctx/get-context spec))
           parsed   (parser/parse-opts args (:option-specs context') :in-order true)
           [x & xs] (:arguments parsed)
           k        (keyword x)]
@@ -37,6 +37,6 @@
 
 (defn compile-context [spec path]
   (reduce (fn [acc ks]
-            (ctx/merge-context acc (ctx/get-context (get-in spec ks))))
+            (ctx/inherit-context acc (ctx/get-context (get-in spec ks))))
           {}
           (reductions conj [] path)))

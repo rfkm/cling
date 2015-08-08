@@ -43,11 +43,10 @@
     :option-specs
     [["-h" "--help" "Display help information"]]})
 
-(defmacro defmain [spec & [config]]
-  `(defn ~'-main [& args#]
+(defmacro defentrypoint [name spec & [config]]
+  `(defn ~name [& args#]
      (let [ctx#  (merge (gen-cli-options ~(:project-id config (up/guess-project-id))) ~config)
            spec# (ctx/with-context ~spec (ctx/merge-context ctx# (ctx/get-context ~spec)))
            ep#   (create-handler spec# ctx#)]
-       (binding [proc/*exit-process?* true]
-         (ep# args#)
-         ep#))))
+       (binding [proc/*exit-process?* ~(:exit-process? config true)]
+         (ep# args#)))))
