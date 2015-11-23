@@ -142,12 +142,19 @@
     {:errors ["Failed to validate : must be an odd number"]
      :arguments nil}))
 
+(facts "omit-leading-seps"
+  (fact "omit leading `--`"
+    (#'c/omit-leading-seps ["--" "--" "1" "--" "2"])
+    =>
+    ["1" "--" "2"]))
+
 (facts "parse-args"
   (fact "can parse"
     (c/parse-args ..args.. ..specs..) => ..parsed..
     (provided
       (c/compile-argument-specs ...specs...) => ..compiled-specs..
-      (c/parse-argument-specs ..args.. ..compiled-specs..) => ..parsed..)))
+      (#'c/omit-leading-seps ..args..) => ..args'..
+      (c/parse-argument-specs ..args'.. ..compiled-specs..) => ..parsed..)))
 
 
 ;;; Copied from clojure.tools.cli's test --

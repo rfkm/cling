@@ -94,6 +94,9 @@
                  (if err parsed (conj parsed {(:id spec) val}))
                  (if err (conj errors err) errors)))))))
 
+(defn- omit-leading-seps [args]
+  (drop-while (partial = "--") args))
+
 (defn parse-args [args argument-specs]
   (let [compiled-specs (compile-argument-specs argument-specs)]
-    (parse-argument-specs args compiled-specs)))
+    (parse-argument-specs (omit-leading-seps args) compiled-specs)))
