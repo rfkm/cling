@@ -1,6 +1,6 @@
 * Cling
 
-  [[https://circleci.com/gh/rkworks/cling][https://circleci.com/gh/rkworks/cling.svg?style=svg]]
+  [[https://circleci.com/gh/rfkm/cling][https://circleci.com/gh/rfkm/cling.svg?style=svg]]
 
   *Cling* is a Clojure CLI applications library.
 
