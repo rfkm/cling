@@ -16,9 +16,9 @@
                      :argument-specs ~arg-specs}
                     (p/assoc-when :desc ~short-desc
                                   :long-desc ~long-desc)))]
-       (def ~(with-meta name
-               (merge {:doc desc
-                       :arglists [(list 'quote args)]}))
+       (def ~(vary-meta name merge
+                        {:doc desc
+                         :arglists [(list 'quote args)]})
          f#))))
 
 (defmacro defcontainer {:arglists '([name description? option-specs routes])}
