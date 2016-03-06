@@ -1,6 +1,6 @@
 (defproject rkworks/cling "0.1.2-SNAPSHOT"
   :description "A Clojure CLI applications library."
-  :url "https://github.com/rkworks/cling"
+  :url "https://github.com/rfkm/cling"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
