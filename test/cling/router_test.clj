@@ -19,9 +19,10 @@
                                  :required "VAL")
                         flags)}))
 
-(defn ret [path handler]
+(defn ret [path handler & [full-path]]
   (contains {:path path
-             :handler handler}))
+             :handler handler
+             :full-path (or full-path path)}))
 
 (facts "match-route"
   (fact "simple"
@@ -43,6 +44,11 @@
   (fact "not found (partial match + extra args)"
     (c/match-route {:a :a} ["b"]) => (ret [] nil)
     (c/match-route {:a {:a :a}} ["a" "b"]) => (ret [:a] nil))
+
+  (fact "catch all"
+    (c/match-route {:a :a true :b} ["b"]) => (ret [] :b [true])
+    (c/match-route {:a {:a :a true :b}} ["a" "b"]) => (ret [:a] :b [:a true])
+    (c/match-route {:a {:a :a true {:b :c}}} ["a" "b"]) => (ret [:a :b] :c [:a true :b]))
 
   (facts "w/ opt"
     (fact "flag simple"

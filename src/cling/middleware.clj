@@ -29,13 +29,14 @@
 
 (defn wrap-router [handler route-spec]
   (fn [env]
-    (let [{path :path routed-handler :handler}
+    (let [{path :path routed-handler :handler full-path :full-path}
           (router/match-route route-spec (:arguments env))]
       (-> env
           (assoc :route-spec route-spec
                  :path path
+                 :full-path full-path
                  :handler routed-handler)
-          (merge (router/compile-context route-spec path))
+          (merge (router/compile-context route-spec full-path))
           handler))))
 
 (defn wrap-dispatcher [handler]
@@ -118,7 +119,9 @@
   (when (map? spec)
     (map (fn [[k v]]
            (-> (ctx/get-context v)
-               (assoc :name (name k))))
+               (assoc :name (if (true? k)
+                              "[Default]"
+                              (name k)))))
          spec)))
 
 (defn- inject-subcommands [env]

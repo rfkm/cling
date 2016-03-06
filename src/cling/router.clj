@@ -3,7 +3,7 @@
             [cling.parser :as parser]))
 
 (defn- result [path handler]
-  {:path path :handler handler})
+  {:path (remove true? path) :handler handler :full-path path})
 
 (defn has-child? [spec]
   (map? spec))
@@ -17,7 +17,9 @@
     (result matched-args spec)
 
     (empty? args)
-    (result matched-args nil)
+    (if (contains? spec true)
+      (match-route* (get spec true) args (conj matched-args true) (ctx/inherit-context context (ctx/get-context spec)))
+      (result matched-args nil))
 
     :else
     (let [context' (ctx/inherit-context context (ctx/get-context spec))
@@ -26,7 +28,9 @@
           k        (keyword x)]
       (if (seq (:errors parsed))
         (result matched-args nil)
-        (match-route* (get spec k) xs (conj matched-args k) context')))))
+        (if (and (not (contains? spec k)) (contains? spec true))
+          (match-route* (get spec true) (:arguments parsed) (conj matched-args true) context')
+          (match-route* (get spec k) xs (conj matched-args k) context'))))))
 
 (defn- initial-context []
   {:option-specs []})

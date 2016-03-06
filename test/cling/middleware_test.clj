@@ -16,12 +16,13 @@
   =>
   {:arguments  ..args..
    :path       ..path..
+   :full-path  ..full-path..
    :handler    ..handler..
    :route-spec ..spec..
    :foo        :bar}
   (provided
-    (router/match-route ..spec.. ..args..) => {:path ..path.. :handler ..handler..}
-    (router/compile-context ..spec.. ..path..) => {:foo :bar}))
+   (router/match-route ..spec.. ..args..) => {:path ..path.. :handler ..handler.. :full-path ..full-path..}
+   (router/compile-context ..spec.. ..full-path..) => {:foo :bar}))
 
 (facts "wrap-dispatcher"
   (fact "Invoke handler"
@@ -48,10 +49,10 @@
    :option-specs  ..option-specs..
    :raw-arguments ..raw-args...}
   (provided
-    (parser/parse-opts ..raw-args.. ..option-specs..)
-    =>
-    {:arguments ["a" "b" "c" "d"]
-     :options   ..options..}))
+   (parser/parse-opts ..raw-args.. ..option-specs..)
+   =>
+   {:arguments ["a" "b" "c" "d"]
+    :options   ..options..}))
 
 (fact "wrap-arguments-parser"
   ((c/wrap-arguments-parser identity)
@@ -63,10 +64,10 @@
    :argument-specs ..specs..
    :errors ["foo" "bar"]}
   (provided
-    (parser/parse-args ..args.. ..specs..)
-    =>
-    {:arguments {:foo 100}
-     :errors ["bar"]}))
+   (parser/parse-args ..args.. ..specs..)
+   =>
+   {:arguments {:foo 100}
+    :errors ["bar"]}))
 
 (fact "wrap-help-command"
   ((c/wrap-help-command identity)
@@ -75,7 +76,7 @@
   {:arguments ..args..
    :help      ..help-fn..}
   (provided
-    (help/create-help-fn {:arguments ..args..}) => ..help-fn..))
+   (help/create-help-fn {:arguments ..args..}) => ..help-fn..))
 
 (facts "wrap-help-option-handler"
   (fact "Invoke help command if help option is given"
@@ -151,4 +152,4 @@
     {:status 1
      :body ..formated..}
     (provided
-      (format-exception ex) => ..formated..)))
+     (format-exception ex) => ..formated..)))
