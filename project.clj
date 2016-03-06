@@ -1,4 +1,4 @@
-(defproject rkworks/cling "0.1.2"
+(defproject rkworks/cling "0.1.3-SNAPSHOT"
   :description "A Clojure CLI applications library."
   :url "https://github.com/rfkm/cling"
   :license {:name "Eclipse Public License"
