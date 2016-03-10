@@ -17,7 +17,7 @@
   ([body] (response 1 body)))
 
 (defn keep-alive []
-  (response nil))
+  (response :keep-alive))
 
 (defn fail!
   ([]

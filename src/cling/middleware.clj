@@ -15,13 +15,12 @@
     (handler (merge env {:arguments args}))))
 
 (defn handle-response [res]
-  (when (map? res)
-    (let [{:keys [body status]} res]
-      (when body
-        (println body))
-      (when status
-        (proc/exit status))))
-  res)
+  (let [{:keys [body status]} (if (map? res) res {})]
+    (when body
+      (println body))
+    (when-not (= :keep-alive status)
+      (proc/exit (or status 0)))
+    res))
 
 (defn wrap-responder [handler]
   (fn [env]
