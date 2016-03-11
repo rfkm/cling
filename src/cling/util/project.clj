@@ -1,9 +1,20 @@
 (ns cling.util.project
   (:require [clojure.java.shell :as sh]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.java.io :as io]))
+
+(defn guess-project-id-from-project-clj []
+  (let [f (io/file "project.clj")]
+    (when-let [[_ p] (and (.exists f)
+                          (re-find #"defproject\s+(\S+)" (slurp f)))]
+      (last (.split p "/")))))
+
+(defn guess-project-id-from-current-ns []
+  (first (str/split (str *ns*) #"\.")))
 
 (defn guess-project-id []
-  (first (str/split (str *ns*) #"\.")))
+  (or (guess-project-id-from-project-clj)
+      (guess-project-id-from-current-ns)))
 
 (defmacro version [key]
   (System/getProperty key))
